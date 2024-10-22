@@ -5,7 +5,7 @@ import Main from './components/main/Main.jsx'
 const App = () => {
   return (
     <>
-    <Sidebar />
+      <Sidebar />
       <Main />
     </>
   )
