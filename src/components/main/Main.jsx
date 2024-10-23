@@ -4,30 +4,35 @@ import { assets } from '../../assets/assets.js';
 import { Context } from '../../context/context.jsx';
 
 const Main = () => {
-
     const { onSent, recentPrompt, showResult, loading, resultData, setInput, input } = useContext(Context);
-    
-    // State to handle dynamic placeholder
     const [placeholder, setPlaceholder] = useState('Enter a prompt here');
-
-    // Function to update placeholder based on screen size
     const updatePlaceholder = () => {
         if (window.innerWidth <= 768) {
-            setPlaceholder('Enter a prompt'); // Mobile screen size
+            setPlaceholder('Enter a prompt');
         } else {
-            setPlaceholder('Enter a prompt here'); // Larger screens
+            setPlaceholder('Enter a prompt here');
         }
     };
 
-    // useEffect to listen to screen size changes
     useEffect(() => {
-        updatePlaceholder(); // Set initial value based on current screen size
-        window.addEventListener('resize', updatePlaceholder); // Listen to resize events
+        updatePlaceholder();
+        window.addEventListener('resize', updatePlaceholder);
 
         return () => {
-            window.removeEventListener('resize', updatePlaceholder); // Cleanup event listener
+            window.removeEventListener('resize', updatePlaceholder);
         };
     }, []);
+
+    const handleCardClick = (question) => {
+        const trimmedQuestion = question.trim();
+        setInput(trimmedQuestion);
+
+        setTimeout(() => {
+            if (input === trimmedQuestion) {
+                onSent();
+            }
+        }, 100);
+    };
 
     return (
         <div className='main'>
@@ -44,19 +49,19 @@ const Main = () => {
                                 <p>How can I Help You today?</p>
                             </div>
                             <div className="cards">
-                                <div className="card">
+                                <div className="card" onClick={() => handleCardClick("Suggest beautiful places to see on an upcoming road trip")}>
                                     <p>Suggest beautiful places to see on an upcoming road trip</p>
                                     <img src={assets.compass_icon} alt="" />
                                 </div>
-                                <div className="card">
+                                <div className="card" onClick={() => handleCardClick("Briefly summarize this concept: urban planning")}>
                                     <p>Briefly summarize this concept: urban planning</p>
                                     <img src={assets.bulb_icon} alt="" />
                                 </div>
-                                <div className="card">
+                                <div className="card" onClick={() => handleCardClick("Brainstorm team bonding activities for our work retreat")}>
                                     <p>Brainstorm team bonding activities for our work retreat</p>
                                     <img src={assets.message_icon} alt="" />
                                 </div>
-                                <div className="card">
+                                <div className="card" onClick={() => handleCardClick("Tell me about React js and React native")}>
                                     <p>Tell me about React js and React native</p>
                                     <img src={assets.code_icon} alt="" />
                                 </div>
@@ -83,20 +88,20 @@ const Main = () => {
 
                 <div className="main-bottom">
                     <div className="serach-box">
-                        <input 
-                            onChange={(e) => setInput(e.target.value)} 
-                            value={input} 
-                            type="text" 
-                            placeholder={placeholder} // Dynamic placeholder based on screen size
+                        <input
+                            onChange={(e) => setInput(e.target.value)}
+                            value={input}
+                            type="text"
+                            placeholder={placeholder}
                         />
                         <div>
                             <img src={assets.gallery_icon} alt="" />
                             <img src={assets.mic_icon} alt="" />
-                            {input ? <img onClick={() => onSent()} src={assets.send_icon} alt="" /> : null}
+                            {input ? <img onClick={() => onSent(input)} src={assets.send_icon} alt="" /> : null}
                         </div>
                     </div>
                     <p className='bottom-info'>
-                        Gemini may display inaccurate info, including about people, so double-check its responses. Your privacy and Gemini Apps                
+                        Gemini may display inaccurate info, including about people, so double-check its responses. Your privacy and Gemini Apps
                     </p>
                 </div>
             </div>
